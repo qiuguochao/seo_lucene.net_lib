@@ -1,0 +1,40 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    @using (Ajax.BeginForm("Cut_2", "Home", FormMethod.Post,new AjaxOptions
+    {
+        InsertionMode =InsertionMode.Replace,
+        OnFailure= "falilFun",
+        OnSuccess= "successFun",
+        LoadingElementId="loading"
+    }))
+    {
+        <div>
+            输入内容：@Html.TextArea("str")
+            <input type="submit" value="进行分词" />
+            @Html.TextArea("textResult")
+        </div>
+    }
+    <div id="loading" style="display:none"> 加载中.....</div>
+</body>
+</html>
+<script src="~/Scripts/jquery-1.8.0.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    function falilFun(text) {
+        alert("分词失败");
+    }
+    function successFun(text) {
+        $("#textResult").html(text);
+    }
+</script>

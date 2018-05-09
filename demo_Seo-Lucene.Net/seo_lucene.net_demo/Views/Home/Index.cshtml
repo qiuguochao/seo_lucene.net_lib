@@ -1,0 +1,74 @@
+﻿
+@{
+    Layout = null;
+}
+@using seo_lucene.net_demo.Models;
+@using Webdiyer.WebControls.Mvc;
+@model PagedList<Article>
+<!DOCTYPE html>
+<link href="~/Css/css.css" rel="stylesheet" />
+<link href="~/jsLib/Autocomplete/css/base/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    @{
+        using (Html.BeginForm("Search", "Home", FormMethod.Get))
+        {
+            <div class="main-content">
+                <div class="search-btn">
+                    @Html.TextBox("txtSearch", null, new { @class = "search-textbox" })
+                    <input type="submit" value="搜索" name="btnSearch" />
+                    <input type="submit" name="btnCreate" value="创建索引" hidden />
+                </div>
+                <div class="search-list">
+                    <dl>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <dt><a href="javascript:void(0)">@Html.Raw(@item.Title)</a></dt>
+                                <dd>@Html.Raw(@item.Content)</dd>
+                            }
+                        }
+                        
+                    </dl>
+                </div>
+            </div>
+        }
+    }
+@if (Model != null)
+{
+    <div>
+        @Html.Pager(Model, new PagerOptions
+   {
+       PageIndexParameterName = "id",
+       FirstPageText = "首页",
+       PrevPageText = "上一页",
+       NextPageText = "下一页",
+       LastPageText = "末页",
+       PageIndexBoxId = "textBox",
+       GoToButtonId = "转到"
+   })
+    </div>
+}
+</body>
+</html>
+<script src="~/jsLib/Autocomplete/js/jquery-1.10.2.js"></script>
+<script src="~/jsLib/Autocomplete/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script type="text/javascript">
+    jQuery(function () {
+        getKeyWordsList("txtSearch");
+    });
+    //自动加载搜索列表
+    function getKeyWordsList(txt) {
+        if (txt == undefined || txt == "")
+            return;
+        $("#" + txt).autocomplete({
+            source: "/Home/GetKeyWordsList",
+            minLength: 1
+        });
+    }
+</script>
